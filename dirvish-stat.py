@@ -63,3 +63,5 @@ for vault in vaults:
             else:
                 print "Fatal index line doesn't match: '" + line + "'"
                 exit()
+        db.flushLinks()
+        db.conn.commit()
