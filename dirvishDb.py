@@ -18,6 +18,7 @@ class DirvishDb:
     def createDatabases(self):
         self.c.execute('''CREATE TABLE IF NOT EXISTS image (id INTEGER PRIMARY KEY ASC AUTOINCREMENT, name TEXT, time TEXT);''')
         self.c.execute('''CREATE TABLE IF NOT EXISTS file (id INTEGER PRIMARY KEY ASC AUTOINCREMENT, inode INTEGER, size INTEGER, name TEXT);''')
+        self.c.execute('''CREATE INDEX IF NOT EXISTS inode_size_name ON file (inode, size, name);''')
         self.c.execute('''CREATE TABLE IF NOT EXISTS image_file (image_id INTEGER, file_id INTEGER, FOREIGN KEY (image_id) REFERENCES image (id), FOREIGN KEY (file_id) REFERENCES file (id));''')
         self.conn.commit()
 
