@@ -2,6 +2,7 @@ import re
 import gzip
 from dirvishVault import DirvishVault
 from dirvishDb import DirvishDb
+import os
 
 MASTER_CONFIG=u'/etc/dirvish/master.conf'
 BANK_DIR=u'/mnt/backup/dirvish/'
@@ -34,18 +35,22 @@ db = DirvishDb(vaults)
 
 #pattern = re.compile('^(\d+).*(\d+) \S+\d+ \d+ (\S+)$')
 # pattern = re.compile(r'^(\d+).*(\d+) \w+ \d+ (?:[0-9:]+) (/.+)$', flags=re.UNICODE)
-pattern = re.compile(r'^(\d+).*\s+(\d+)\s+(?:[A-Za-z]+)\s+(?:\d+)\s+(?:[0-9:]+)\s+(/.+)$', flags=re.UNICODE)
+pattern = re.compile(r'^(\d+)\s+\d+\s+[A-Za-z-]+\s+\d+\s+[0-9A-Za-z-_]+\s+[0-9A-Za-z-_]+\s+(\d*)\s*[A-Za-z]+\s+\d+\s+[0-9:]+\s+(/.+)$', flags=re.UNICODE)
 
 for vault in vaults:
      print vault.__unicode__() #+ " " + vault.maxAge().isoformat()
      for image in vault.images:
         print "-> " + image.__unicode__() #+ " " + str(image.date.isoformat())
+        if not os.path.exists(image.indexFile()):
+            print "skipping... empty backup"
+            continue
         index = gzip.open(image.indexFile())
         db_image = db.imageExists(vault.name, image.date)
         if not db_image:
             db_image = db.createImage(vault.name, image.date)
         else:
-            db_image = db_image[0]
+            #db_image = db_image[0]
+            continue
 
         for line in index:
             match = pattern.match(line)
