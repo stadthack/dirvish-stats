@@ -33,9 +33,7 @@ def updateDb(vaults):
 vaults = parseVaults()
 db = DirvishDb(vaults)
 
-#pattern = re.compile('^(\d+).*(\d+) \S+\d+ \d+ (\S+)$')
-# pattern = re.compile(r'^(\d+).*(\d+) \w+ \d+ (?:[0-9:]+) (/.+)$', flags=re.UNICODE)
-pattern = re.compile(r'^\s*(\d+)\s+\d+\s+[A-Za-z-]+\s+\d+\s+[0-9A-Za-z-_+]+\s+[0-9A-Za-z-_+]+\s+(\d*)\s*[A-Za-z]+\s+\d+\s+[0-9:]+\s+(/.+)$', flags=re.UNICODE)
+pattern = re.compile(r'^\s*(\d+)\s+\d+\s+[A-Za-z-]+\s+\d+\s+.+?\s+.+?\s+(\d*)\s*[A-Za-z]+\s+\d+\s+[0-9:]+\s+(/.+)$', flags=re.UNICODE)
 
 for vault in vaults:
      print vault.__unicode__() #+ " " + vault.maxAge().isoformat()
