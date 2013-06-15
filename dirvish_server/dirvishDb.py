@@ -8,18 +8,21 @@ class DirvishDb:
     vaults = None
     links = None
 
-    def __init__(self, vaults):
+    def __init__(self):
         self.conn = sqlite3.connect('dirvish.db')
         self.c = self.conn.cursor()
-        self.vaults = vaults
         self.links = []
         self.createDatabases()
 
     def createDatabases(self):
+        # TODO add success flag
         self.c.execute('''CREATE TABLE IF NOT EXISTS image (id INTEGER PRIMARY KEY ASC AUTOINCREMENT, name TEXT, time TEXT);''')
-        self.c.execute('''CREATE TABLE IF NOT EXISTS file (id INTEGER PRIMARY KEY ASC AUTOINCREMENT, inode INTEGER, size INTEGER, name TEXT);''')
+        self.c.execute('''CREATE TABLE IF NOT EXISTS file (id INTEGER PRIMARY KEY ASC AUTOINCREMENT, inode INTEGER, size INTEGER, name TEXT, type INTEGER);''')
+        self.c.execute('''CREATE INDEX IF NOT EXISTS inode_size_name ON file (inode, size, name);''')
         self.c.execute('''CREATE INDEX IF NOT EXISTS inode_size_name ON file (inode, size, name);''')
         self.c.execute('''CREATE TABLE IF NOT EXISTS image_file (image_id INTEGER, file_id INTEGER, FOREIGN KEY (image_id) REFERENCES image (id), FOREIGN KEY (file_id) REFERENCES file (id));''')
+        self.c.execute('''CREATE INDEX IF NOT EXISTS image_file_file_id ON image_file (file_id);''')
+        self.c.execute('''CREATE INDEX IF NOT EXISTS image_file_image_id ON image_file (image_id);''')
         self.conn.commit()
 
 
@@ -28,8 +31,8 @@ class DirvishDb:
         file = self.c.fetchone()
         return file
 
-    def createFile(self, inode, size, name):
-        self.c.execute('''INSERT INTO file (inode, size, name) VALUES (?, ?, ?);''', (inode, size, name))
+    def createFile(self, inode, size, name, type):
+        self.c.execute('''INSERT INTO file (inode, size, name, type) VALUES (?, ?, ?, ?);''', (inode, size, name, type))
         #self.conn.commit()
         return self.c.lastrowid
 

@@ -1,0 +1,12 @@
+.nav {
+    background-color: red;
+    float: left;
+}
+
+.content {
+    background-color: blue;
+}
+
+.content iframe {
+    width: 100%;
+}

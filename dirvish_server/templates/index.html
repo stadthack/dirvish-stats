@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ STATIC_URL }}main.css">
+    </head>
+    <body>
+        <div class="nav">
+        <ul>
+        {% for host in hosts %}
+            <li>{{ host.name }}</li>
+        {% endfor %}
+        </ul>
+        </div>
+        <div class="content">
+            <iframe src="http://www.disney.com"></iframe>
+        </div>
+    </body>
+</html>
