@@ -18,7 +18,6 @@ def index(request):
     return response
 
 def hosts(request):
-    t = loader.get_template("hosts.json")
     hosts = Image.objects.all().values('name').distinct()
     images = Image.objects.all().order_by('time')
     c = RequestContext(request, {'hosts': hosts, 'images': images})
@@ -48,7 +47,6 @@ def dictfetchall(cursor):
     ]
 
 def trend(request):
-    t = loader.get_template("trend.json")
     host = request.GET.get('hostname')
     # values = ImageFile.objects.filter(image__name=host).annotate(Sum('size'))
     cursor = connection.cursor()
