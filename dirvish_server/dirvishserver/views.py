@@ -83,7 +83,7 @@ def detail(request):
     image = request.GET.get('image')
 
     files = File.objects.raw("SELECT * from file f, image_file if WHERE f.id = if.file_id AND if.image_id=" + image + " AND f.type = 0 ORDER BY f.name;")
-    tree = Filetree('/',0)
+    tree = Filetree('', '/',0)
     for file in files:
         tree.append(file.name, file.size)
     response = HttpResponse(FiletreeEncoder().encode(tree), content_type="application/json")

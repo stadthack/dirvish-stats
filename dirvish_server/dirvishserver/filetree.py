@@ -9,9 +9,10 @@ class Filetree:
     # childs = {}
     pattern = re.compile(r'^(.+?)(/.*)$', flags=re.UNICODE)
 
-    def __init__(self, name, size):
+    def __init__(self, name, path,size):
         self.name = name
         self.size = size
+        self.path = path
         self.childs = {}
 
 
@@ -24,9 +25,9 @@ class Filetree:
         if match:
             if not match.group(1) in self.childs:
                 if (self.name == '/'):
-                    self.childs[match.group(1)] = Filetree(self.name + match.group(1), 0)
+                    self.childs[match.group(1)] = Filetree(match.group(1), self.name + match.group(1), 0)
                 else:
-                    self.childs[match.group(1)] = Filetree(self.name + "/" + match.group(1), 0)
+                    self.childs[match.group(1)] = Filetree(match.group(1), self.name + "/" + match.group(1), 0)
             self.childs[match.group(1)].append(name, size)
             print match.group(1)
 
@@ -36,5 +37,5 @@ class Filetree:
 class FiletreeEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, Filetree):
-            return { 'name': o.name, 'size': o.size, 'childs': o.childs}
+            return { 'path': o.path, 'name': o.name, 'size': o.size, 'childs': o.childs}
         return JSONEncoder.default(self, o)
