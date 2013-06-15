@@ -1,0 +1,3 @@
+[submodule "dirvish-stats"]
+	path = dirvish-stats
+	url = ssh://git@bitbucket.org/ahx/dirvish-stats.git
