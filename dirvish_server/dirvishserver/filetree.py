@@ -31,11 +31,14 @@ class Filetree:
             self.childs[match.group(1)].append(name, size)
             print match.group(1)
 
+    def childst(self):
+        return self.childs.values()
+
     def __unicode__(self):
         return self.name + "(" + self.size + ")"
 
 class FiletreeEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, Filetree):
-            return { 'path': o.path, 'name': o.name, 'size': o.size, 'childs': o.childs}
+            return { 'path': o.path, 'name': o.name, 'size': o.size, 'childs': o.childst()}
         return JSONEncoder.default(self, o)
