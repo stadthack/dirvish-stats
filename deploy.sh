@@ -2,7 +2,7 @@
 
 echo "This file need environment Variables"
 
-echo "Copy Files"
+echo "Copy Files to $TARGET_HOST:$TARGET_DIR"
 rsync --delete-delay -vrz --progress * $TARGET_HOST:$TARGET_DIR || exit 1
 ssh $TARGET_HOST "cd $TARGET_HOST && bash install.sh"
 
